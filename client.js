@@ -10,22 +10,17 @@ const connect = function () {
   conn.setEncoding("utf8");
 
   conn.on('connect', () => {
-    console.log('We up in this b*tch');
+    console.log('Houston, we have landed.');
     conn.write('Name: RJE');
-    // let count = 0;
-
-    // while (true) {
-    //   if (count > 1000) {
-    //     break;
-    //   }
-    //   setTimeout(() => {
-    //     conn.write("Move: up");
-    //   }, count += 50);
-    // }
   })
 
   conn.on('data', (data) => {
     console.log(data);
+  });
+
+  conn.on('close', () => {
+    // close the stdin process
+    process.exit();
   });
 
   return conn;
