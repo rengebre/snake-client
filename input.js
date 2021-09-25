@@ -18,39 +18,44 @@ const setupInput = function(conn) {
       w: 's',
       d: 'a',
       s: 'w'
-    }
-    // console.log('key:', key, 'opp key:', oppositeKeys[prevKey]);
-    if (prevKey && key[0] !== oppositeKeys[prevKey]) {
-      clearInterval(handler)
-      prevKey = key[0];
-    }
+    };
 
-    if (!prevKey){
-      prevKey = key[0];
-    }
+    const moveSnake = function(direction, speed) {
+      // console.log('key:', key, 'opp key:', oppositeKeys[prevKey]);
+      if (prevKey && key[0] !== oppositeKeys[prevKey]) {
+        clearInterval(handler);
+        prevKey = key[0];
+      }
+  
+      if (!prevKey) {
+        prevKey = key[0];
+      }
+   
+      handler = setInterval(() => {
+        conn.write(`Move: ${direction}`);
+      }, speed);
+    };
 
-    switch (key[0]) {
+    switch(key[0]) {
       case 'w':
-        handler = setInterval(() => {
-          conn.write("Move: up");
-        }, speed * 2);
+        moveSnake('up', speed);
         break;
       case 'a':
-        handler = setInterval(() => {
-          conn.write("Move: left");
-        }, speed);
-        break; 
+        moveSnake('left', speed * 2);
+        break;
       case 's':
-        handler = setInterval(() => {
-          conn.write("Move: down");
-        }, speed);
-        break; 
+        moveSnake('down', speed);
+        break;
       case 'd':
-        handler = setInterval(() => {
-          conn.write("Move: right");
-        }, speed * 2);
-        break;  
-    }
+        moveSnake('right', speed * 2);
+        break;
+      case 'j':
+        conn.write("Say: I AM A GOD!");
+        break;
+      case 'k':
+        conn.write('Say: oh... nvm');
+        break;
+    };
   };
   
   stdin.on('data', handleUserInput);
